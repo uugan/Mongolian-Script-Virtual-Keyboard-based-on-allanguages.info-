@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+ <head>
+  <title>Virtual Keyboard</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-UTF-8" />
+
+  <script type="text/javascript" src="vk_loader.js?vk_layout=CN%20Chinese%20Simpl.%20Pinyin&vk_skin=flat_gray" ></script>
+
+
+
+  <style type="text/css">
+      html, body {
+
+      }
+      table {
+          border-collapse: collapse;
+          padding: 0;
+          margin: 0;
+      }
+      td {
+          margin: 0;
+          text-align: left;
+          vertical-align: top;
+      }
+      td.layouts {
+          font-size: 12px;
+      }
+      td.layouts a {
+          white-space: nowrap;
+          font-size: 11px;
+          font-weight: bold;
+          color: #555;
+      }
+      td.layouts a:hover {
+          color: #000;
+      }
+      label {
+          white-space: nowrap;
+      }
+
+      #skins a {
+          position: relative;
+      }
+      #skins a img {
+          border: 0;
+          display: none;
+          left: 0%;
+          position: absolute;
+          top: 100%;
+      }
+      #skins a:hover {
+          z-index: 2;
+      }
+      #skins a:hover img {
+          display: block;
+      }
+
+      h1 {
+          font-size: 150%;
+      }
+      h2 {
+          font-size: 130%;
+          padding: 0 6px;
+      }
+      table form input {
+          width: 247px;
+          font-family:MongolianScript;
+      }
+      table form textarea {
+		text-align: left;
+		 tb-lr; /*IE*/
+		white-space: pre;
+		line-height: 1.5em;
+		font-family:MongolianScript;
+		/*position:absolute;*/
+		left: 80px;
+		clear:both;
+		width:600px; 
+		height:300px;
+    	padding:10px;
+    	overflow: scroll;
+         /* width: 500px;*/
+      }
+
+  </style>
+
+ </head>
+ <body><!-- test -->
+<center><b><a href="http://allanguages.info">Official site</a></b><br /></center>
+<hr />
+
+  <h1 align="center">VirtualKeyboard developer demo</h1>
+  <table>
+   <tr>
+    <td rowspan="3" style="width: 40%">
+     <form action="no.cgi" method="get">
+      <div>
+       <table>
+        <tr>
+         <td>
+          Simple input:<br />
+          <input type="text" onfocus="VirtualKeyboard.attachInput(this)" />
+         </td>
+         <td>
+          Password (no keyboard animation):<br />
+          <input type="password" class="VK_no_animate" onfocus="VirtualKeyboard.attachInput(this)" />
+         </td>
+        </tr>
+        <tr>
+         <td colspan="2">
+          Text area:<br />
+          <textarea id="text" rows="6" wrap="soft" onfocus="VirtualKeyboard.attachInput(this)"></textarea>
+         </td>
+        </tr>
+       </table>
+       <div id="td"></div>
+      </div>
+     </form>
+    </td>
+    <td>
+ 
+    </td>
+   </tr>
+   <tr>
+    <td>
+     <h2>Layouts filter</h2>
+     <div id="lfilter" onclick="setFilter()">
+     </div>
+    </td>
+   </tr>
+   <tr>
+    <td>
+
+    </td>
+   </tr>
+   <tr>
+    <td colspan="2" class="layouts">
+     <h2>Supported languagues</h2>
+     <div id="layouts"></div>
+    </td>
+     <script type="text/javascript">
+         /**
+          *  Collects all selected filters and changes available layouts
+          */
+         function setFilter() {
+             var filter = []
+                ,cbxs = document.getElementsByTagName('input');
+             for (var i=0,cL=cbxs.length; i<cL; i++) {
+                 if (cbxs[i].checked)
+                     filter.push(cbxs[i].value);
+             }
+             VirtualKeyboard.setVisibleLayoutCodes(filter);
+         }
+
+
+         EM.addEventListener(window,'domload',function(){
+             /*
+             *  building the list of language codes
+             */
+             var codes = VirtualKeyboard.getLayoutCodes()
+                ,cont = document.getElementById('lfilter')
+                ,html = []
+             for (var i=0, cL=codes.length; i<cL; i++) {
+                 html.push ("<td><label for='cbx"+i+"'><input id='cbx"+i+"' type='checkbox' value='"+codes[i]+"' />"+codes[i]+"</label></td>");
+                 if (!((i+1)%10))
+                     html.push('</tr><tr>');
+             }
+             cont.innerHTML = '<table><tr>'+html.join("")+'</tr></table>';
+
+             /*
+             *  open the keyboard
+             */
+             VirtualKeyboard.toggle('text','td');
+
+             /*
+             *  building the list of layouts
+             */
+             var el = document.getElementById('layouts')
+                ,lt = VirtualKeyboard.getLayouts()
+                ,dl = window.location.href.replace(/[?#].+/,"")
+
+             for (var i=0,lL=lt.length; i<lL; i++) {
+                 var cl = lt[i];
+                 cl = cl[0]+" "+cl[1];
+                 lt[i] = "<a href='"+dl+"?vk_layout="+cl+"' onclick='VirtualKeyboard.switchLayout(this.title);return false;' title='"+cl+"' alt='"+cl+"' >"+cl+"</a>";
+             }
+             el.innerHTML += lt.join("&nbsp;| ");
+
+         
+         
+
+         });
+         
+    
+}
+     </script>
+    </td>
+   </tr>
+
+  </table>
+
+
+ </body>
+</html>
